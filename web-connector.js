@@ -2,7 +2,19 @@ var feeds, modules;
 feeds = ["Location", "Acceleration"];
 modules = {"slot1": "LCD", "slot2": "GPS"};
 
-//HTML5 storage functions
+//value loading
+var getQueryVariable = function(name) {
+    var query, vars, pair;
+    query = window.location.search.substring(1);
+    vars = query.split("&");
+    for (var i=0; i<vars.length; i++) {
+        pair = vars[i].split("=");
+        if (pair[0] === name) {
+            return pair[1];
+        }
+    }
+}
+
 var supportsHTML5Storage = function() {
     try {
         return 'localStorage' in window && window['localStorage'] !== null;
@@ -12,14 +24,27 @@ var supportsHTML5Storage = function() {
 };
 
 loadValues = function() {
+    var participationKey, swarmID, resourceID;
+    participationKey = getQueryVariable("participation_key");
+    swarmID = getQueryVariable("swarm_id");
+    resourceID = getQueryVariable("resource_id");
     if (supportsHTML5Storage()) {
-        if (localStorage["participation_key"]) {
+
+        if (participationKey) {
+            document.configuration.participation_key.value = participationKey;
+        } else if (localStorage["participation_key"]) {
             document.configuration.participation_key.value = localStorage["participation_key"];
         }
-        if (localStorage["swarm_id"]) {
+
+        if (swarmID) {
+            document.configuration.swarm_id.value = swarmID;
+        } else if (localStorage["swarm_id"]) {
             document.configuration.swarm_id.value = localStorage["swarm_id"];
         }
-        if (localStorage["resource_id"]) {
+
+        if(resourceID) {
+            document.configuration.resource_id.value = resourceID;
+        } else if (localStorage["resource_id"]) {
             document.configuration.resource_id.value = localStorage["resource_id"];
         }
     }
@@ -49,7 +74,7 @@ var gpsHandler = function(location) {
 var updateGPS = setInterval(function() {navigator.geolocation.getCurrentPosition(gpsHandler);},1000);
 
 
-//send functions
+//send
 var sendCapabilities = function(from) {
     var payload;
     payload = {"capabilities": {"feeds": feeds, "modules": modules}};
