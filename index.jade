@@ -10,22 +10,26 @@ html(lang='en')
 
   body
 
-    .container
       .page-header
-        h1 BUGswarm: Web Connector
+        h1
+          a(href="http://developer.bugswarm.net")
+            img(src="images/bs_logo.png")
+        h2 Web Connector
       .row
-        .span8.columns
-          h2 Supported Devices:
+        .span4.columns
+          h3 Supported Devices:
           ul
             li: h4 iPhone
             li: h4 iPad        
-        .span8.columns
-          h2 Supported Services:
+        .span4.columns
+          h3 Supported Services:
           ul
             li: h4 Location
             li: h4 Acceleration
 
-      form#configuration.actions(name='configuration')
+      .page-header
+
+      form#configuration(name='configuration')
         fieldset#input
           legend: h3 Configuration
           .clearfix
