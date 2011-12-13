@@ -2,6 +2,29 @@ var feeds, modules;
 feeds = ["Location", "Acceleration"];
 modules = {"slot1": "LCD", "slot2": "GPS"};
 
+//HTML5 storage functions
+var supportsHTML5Storage = function() {
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+};
+
+loadValues = function() {
+    if (supportsHTML5Storage()) {
+        if (localStorage["participation_key"]) {
+            document.configuration.participation_key.value = localStorage["participation_key"];
+        }
+        if (localStorage["swarm_id"]) {
+            document.configuration.swarm_id.value = localStorage["swarm_id"];
+        }
+        if (localStorage["resource_id"]) {
+            document.configuration.resource_id.value = localStorage["resource_id"];
+        }
+    }
+};
+
 //acquire acceleration data
 var accelZ, accelY, accelX;
 
@@ -146,7 +169,11 @@ var isFeedRequest = function(payload) {
 
 //connector initialization
 connectorInit = function() {
-
+    if (supportsHTML5Storage()) {
+        localStorage.setItem("participation_key", document.configuration.participation_key.value);
+        localStorage.setItem("swarm_id", document.configuration.swarm_id.value);
+        localStorage.setItem("resource_id", document.configuration.resource_id.value);
+    }
     SWARM.connect({apikey: document.configuration.participation_key.value,
                    resource: document.configuration.resource_id.value,
                    swarms: [document.configuration.swarm_id.value],
