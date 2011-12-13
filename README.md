@@ -1,1 +1,1 @@
-# BUGswarm: JavaScript Connector
+# BUGswarm: Web Connector
