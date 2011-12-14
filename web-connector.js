@@ -52,9 +52,7 @@ loadValues = function() {
 
 //acquire acceleration data
 var accelZ, accelY, accelX;
-accelZ = 15.0;
-accelY = 10.0;
-accelX = 5.0;
+
 //iOS
 if (window.DeviceMotionEvent) {
     window.ondevicemotion = function(e) {
@@ -209,7 +207,7 @@ connectorInit = function() {
                    onconnect:
                        function onConnect() {
                            console.log("Connected to swarm: " + document.configuration.swarm_id.value);
-                           $("#input").replaceWith("<h3>Connected to Swarm: " + document.configuration.swarm_id.value + "!</h3><p>Reload to disconnect</p>");
+                           $("#input").replaceWith("<h3>Connected to Swarm: " + document.configuration.swarm_id.value + "!</h3><p>Reload or close the tab to disconnect</p>");
                        },
                    onpresence:
                        function onPresence(presence) {

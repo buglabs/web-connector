@@ -113,7 +113,6 @@ SWARM.connect({apikey: participationKey,
 
                            //acceleration feed
                            if (messageObj.payload.Acceleration) {
-                               console.log("Updating acceleration data:");
                                var newX, newY, newZ;
                                if (messageObj.payload.Acceleration.z) {
                                    newZ = messageObj.payload.Acceleration.z;
