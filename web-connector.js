@@ -52,7 +52,9 @@ loadValues = function() {
 
 //acquire acceleration data
 var accelZ, accelY, accelX;
-
+accelZ = 15.0;
+accelY = 10.0;
+accelX = 5.0;
 //iOS
 if (window.DeviceMotionEvent) {
     window.ondevicemotion = function(e) {
