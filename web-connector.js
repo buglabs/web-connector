@@ -86,7 +86,7 @@ var sendFeedResponse = function(sendTo, feed) {
     var payload;
     if (feed === "Acceleration") {       
         if (accelZ && accelY && accelX) {
-            payload = {"Acceleration": {"z": accelZ, "y": accelY, "x": accelX}};
+            payload = {"Acceleration": {"z": accelZ/9.81, "y": accelY/9.81, "x": accelX/9.81}};
         } else {
             payload = {"Acceleration": "No data"};
         }
