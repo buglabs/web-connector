@@ -1,0 +1,59 @@
+!!! 5
+html(lang='en')
+  head
+    title Web Connector
+    link(rel='stylesheet', href='bootstrap.css')
+    link(rel='stylesheet', href='this.css')
+    script(src='http://code.jquery.com/jquery-1.5.2.js')
+    script(src='http://cdn.buglabs.net/swarm/swarm-v0.3.2.js')
+    script(src='web-connector.js')
+
+  body(onload="loadValues()")
+
+      .page-header
+        h1
+          a(href="http://developer.bugswarm.net")
+            img(src="images/bs_logo.png")
+        h2 Web Connector
+      .row
+        .span4.columns
+          h3 Supported Devices:
+          ul
+            li: h4 iPhone
+            li: h4 iPad        
+        .span4.columns
+          h3 Supported Services:
+          ul
+            li: h4 Location
+            li: h4 Acceleration
+
+      .page-header
+
+      form#configuration(name='configuration')
+        fieldset#input
+          legend: h3 Configuration
+          .clearfix
+            label(for="participation_key")
+              strong Participation Key
+            .input
+              input.medium#participation_key(name="participation_key", size="14", type="text")
+          .clearfix
+            label(for="swarm_id")
+              strong Swarm ID
+            .input
+              input.medium#swarm_id(name="swarm_id", size="14", type="text")
+          .clearfix
+            label(for="resource_id")
+              strong Resource ID
+            .input
+              input.medium#resource_id(name="resource_id", size="14", type="text")
+          .clearfix
+            .input
+              input.btn.primary(type="button", value="Connect", onclick="javascript: connectorInit()")
+              | 
+              input.btn(type="reset") Cancel
+
+        .page-header
+          
+        h4
+          a(href="accel-viz/accel-viz.html", target="_blank") Accel-Viz
