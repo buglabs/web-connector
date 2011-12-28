@@ -1,5 +1,5 @@
 var feeds, modules;
-feeds = ["Location", "Acceleration"];
+feeds = ["Location", "Acceleration", "Camera"];
 modules = {"slot1": "LCD", "slot2": "GPS"};
 
 //value loading
@@ -79,12 +79,13 @@ var sendCapabilities = function(from) {
     var payload;
     payload = {"capabilities": {"feeds": feeds, "modules": modules}};
     console.log("Sending private capabilities to resource: " + from.resource);
+    console.log("Capabilities Payload: " + JSON.stringify(payload));
     SWARM.send(payload, [{swarm: document.configuration.swarm_id.value, resource: from.resource}]);
 };
 
 var sendFeedResponse = function(sendTo, feed) {    
     var payload;
-    if (feed === "Acceleration") {       
+    if (feed === "Acceleration") {
         if (accelZ && accelY && accelX) {
             payload = {"Acceleration": {"z": accelZ/9.81, "y": accelY/9.81, "x": accelX/9.81}};
         } else {
@@ -96,9 +97,11 @@ var sendFeedResponse = function(sendTo, feed) {
         } else {
             payload = {"Location": "No data"};
         }
+    } else if (feed === "Camera") {        
+        payload = {"Camera": {"Location": "http://barberdt.github.com/images/portrait.jpg", "Resource": "Resource ID"}};
     }
     if (payload) {
-        console.log("Sending Feed Response to " + sendTo);
+        //console.log("Sending Feed Response to " + sendTo);
         SWARM.send(payload, [{swarm: document.configuration.swarm_id.value, resource: sendTo}]);
     }
 };
@@ -114,6 +117,7 @@ var respondToFeedRequest = function(from, payload) {
     if (frequency) {
         accelerationInterval = window[sendTo + "_acceleration"];
         locationInterval = window[sendTo + "_location"];
+        cameraInterval = window[sendTo + "_camera"];
         if (feed === "Acceleration") {
             if (accelerationInterval) {
                 clearInterval(accelerationInterval);
@@ -124,6 +128,11 @@ var respondToFeedRequest = function(from, payload) {
                 clearInterval(locationInterval);
             }
             window[sendTo + "_location"] = setInterval(function () { sendFeedResponse(sendTo, feed);}, frequency*1000);
+        } else if (feed === "Camera") {
+            if (cameraInterval) {
+                clearInterval(cameraInterval);
+            }
+            window[sendTo + "_camera"] = setInterval(function () { sendFeedResponse(sendTo, feed);}, frequency*1000);
         }
     } else {
         sendFeedResponse(sendTo, feed);
@@ -135,11 +144,15 @@ var killIntervals = function(from) {
     resourceID = from.resource;
     accelerationInterval = window[resourceID + "_acceleration"];
     locationInterval = window[resourceID + "_location"];
+    cameraInterval = window[resourceID + "_camera"];
     if (accelerationInterval) {
         clearInterval(accelerationInterval);
     }
     if (locationInterval) {
         clearInterval(locationInterval);
+    }
+    if (cameraInterval) {
+        clearInterval(cameraInterval);
     }
 };
 
@@ -250,7 +263,8 @@ connectorInit = function() {
                        },
                    onerror:
                        function onError(error) {
-                           console.log("Error: " + error);
+                           var errorString = JSON.stringify(error);
+                           console.log("Error: " + errorString);
                        }
                   });
 };
