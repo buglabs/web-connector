@@ -1,5 +1,5 @@
 var feeds, modules;
-feeds = ["Location", "Acceleration", "Camera"];
+feeds = ["Location", "Acceleration"];
 modules = {"slot1": "LCD", "slot2": "GPS"};
 
 //value loading
@@ -98,7 +98,7 @@ var sendFeedResponse = function(sendTo, feed) {
             payload = {"Location": "No data"};
         }
     } else if (feed === "Camera") {        
-        payload = {"Camera": {"Location": "http://barberdt.github.com/images/portrait.jpg", "Resource": "Resource ID"}};
+        payload = {"Camera": {"location": "http://barberdt.github.com/images/portrait.jpg"}};
     }
     if (payload) {
         //console.log("Sending Feed Response to " + sendTo);
@@ -257,6 +257,7 @@ connectorInit = function() {
                                console.log("Private Message: " + message);
                                if (isFeedRequest(payload)) {
                                    console.log("Received Feed Request from " + from.resource);
+                                   console.log("Feed Request: " + message);
                                    respondToFeedRequest(from, payload);
                                }
                            }
