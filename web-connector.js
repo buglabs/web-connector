@@ -78,8 +78,6 @@ var updateGPS = setInterval(function() {navigator.geolocation.getCurrentPosition
 var sendCapabilities = function(from) {
     var payload;
     payload = {"capabilities": {"feeds": feeds, "modules": modules}};
-    console.log("Sending private capabilities to resource: " + from.resource);
-    console.log("Capabilities Payload: " + JSON.stringify(payload));
     SWARM.send(payload, [{swarm: document.configuration.swarm_id.value, resource: from.resource}]);
 };
 
@@ -101,7 +99,6 @@ var sendFeedResponse = function(sendTo, feed) {
         payload = {"Camera": {"location": "http://barberdt.github.com/images/portrait.jpg"}};
     }
     if (payload) {
-        //console.log("Sending Feed Response to " + sendTo);
         SWARM.send(payload, [{swarm: document.configuration.swarm_id.value, resource: sendTo}]);
     }
 };
@@ -219,7 +216,6 @@ connectorInit = function() {
                    //callbacks
                    onconnect:
                        function onConnect() {
-                           console.log("Connected to swarm: " + document.configuration.swarm_id.value);
                            $("#input").replaceWith("<h3>Connected to Swarm: " + document.configuration.swarm_id.value + "!</h3><p>Reload or close the tab to disconnect</p>");
                        },
                    onpresence:
@@ -231,7 +227,6 @@ connectorInit = function() {
                            type = presenceObj.presence.type;
                            
                            if (isSwarmPresence(from)) {
-                               console.log("Presence: " + presence);
                                if (!isPresenceUnavailable(type) && !isMyPresence(from)) {
                                    sendCapabilities(from);
                                } else if (isPresenceUnavailable(type) && !isMyPresence(type)) {
@@ -241,12 +236,10 @@ connectorInit = function() {
                        },
                    onmessage:
                        function onMessage(message) {
-                           console.log("Message: " + message);
                            var messageObj, from, payload, publicVal;
                            
                            messageObj = JSON.parse(message);
                            from = messageObj.message.from;
-                           console.log(message);
                            payload = messageObj.message.payload;
                            publicVal = messageObj.message.public;
                            
@@ -254,10 +247,7 @@ connectorInit = function() {
                            }
                            
                            if (isPrivateMessage(publicVal)) {
-                               console.log("Private Message: " + message);
                                if (isFeedRequest(payload)) {
-                                   console.log("Received Feed Request from " + from.resource);
-                                   console.log("Feed Request: " + message);
                                    respondToFeedRequest(from, payload);
                                }
                            }
@@ -265,7 +255,6 @@ connectorInit = function() {
                    onerror:
                        function onError(error) {
                            var errorString = JSON.stringify(error);
-                           console.log("Error: " + errorString);
                        }
                   });
 };
