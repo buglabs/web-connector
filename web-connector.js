@@ -99,6 +99,7 @@ var sendFeedResponse = function(sendTo, feed) {
         payload = {"Camera": {"location": "http://barberdt.github.com/images/portrait.jpg"}};
     }
     if (payload) {
+        console.log(JSON.stringify(payload));
         SWARM.send(payload, [{swarm: document.configuration.swarm_id.value, resource: sendTo}]);
     }
 };
@@ -216,15 +217,15 @@ connectorInit = function() {
                    //callbacks
                    onconnect:
                        function onConnect() {
+                           console.log('connected');
                            $("#input").replaceWith("<h3>Connected to Swarm: " + document.configuration.swarm_id.value + "!</h3><p>Reload or close the tab to disconnect</p>");
                        },
                    onpresence:
                        function onPresence(presence) {
-                           var presenceObj, from, type;
-                           
-                           presenceObj = JSON.parse(presence);                     
-                           from = presenceObj.presence.from;
-                           type = presenceObj.presence.type;
+                           console.log(JSON.stringify(presence));
+                           var from, type;                           
+                           from = presence.from;
+                           type = presence.type;
                            
                            if (isSwarmPresence(from)) {
                                if (!isPresenceUnavailable(type) && !isMyPresence(from)) {
@@ -236,12 +237,11 @@ connectorInit = function() {
                        },
                    onmessage:
                        function onMessage(message) {
-                           var messageObj, from, payload, publicVal;
-                           
-                           messageObj = JSON.parse(message);
-                           from = messageObj.message.from;
-                           payload = messageObj.message.payload;
-                           publicVal = messageObj.message.public;
+                           console.log(JSON.stringify(message));
+                           var from, payload, publicVal;                           
+                           from = message.from;
+                           payload = message.payload;
+                           publicVal = message.public;
                            
                            if (isPublicMessage(publicVal)) {
                            }
